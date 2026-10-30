@@ -1,17 +1,130 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>微分メーカー｜数学Ⅱ・Ⅲ 微分を無限に練習</title><meta name="description" content="数学Ⅱ・Ⅲの微分を、自動生成の問題で何問でも練習。途中式の解説・自動採点・紙での自己採点・苦手分野の分析つき。"><meta name="theme-color" content="#14307a">
-<link rel="stylesheet" href="style.css">
-</head>
-<body><main>
-<header class="hero"><div class="logo">∂</div><div><h1>微分メーカー</h1><p class="sub">微分を、解いて解いて解きまくれ。</p></div></header>
-<section id="home"></section>
-<section id="prac" hidden>
-<div class="topbar"><button onclick="home()">← ホーム</button><div id="inf" class="chips"></div><button onclick="tgP()">✏️ 紙で解く／入力</button></div><div class="prog"><i id="pg"></i></div>
-<div id="qa"><div class="card qcard"><div id="q" class="q"></div><div id="pr" class="pr"></div></div><div class="card acard" id="acard">
-<h2 id="h2in">あなたの答え（導関数）</h2><input id="in" placeholder="例: 2*x*cos(x)  /  1/(2*sqrt(x))" autocomplete="off" autocapitalize="off"><div class="pal"><button onclick="ins('x')">x</button><button onclick="ins('^')">^ 累乗</button><button onclick="ins('/')">/ 分数</button><button onclick="ins('*')">× 掛け算</button><button onclick="ins('+')">+</button><button onclick="ins('-')">−</button><button onclick="ins('(')">(</button><button onclick="ins(')')">)</button><button onclick="ins('sqrt(')">√</button><button onclick="ins('sin(')">sin</button><button onclick="ins('cos(')">cos</button><button onclick="ins('tan(')">tan</button><button onclick="ins('log(')">log</button><button onclick="ins('log_')">logₐ</button><button onclick="ins('log(,)',2)">log(a,x)</button><button onclick="ins('^2')">x²</button><button onclick="ins('^()',1)">^( )</button><button onclick="ins('()/()',4)">( )/( )</button><button onclick="ins('e^(')">e^</button><button onclick="ins('pi')">π</button><button onclick="bs()">⌫</button><button onclick="cl()">クリア</button></div><div id="pv" class="pv"><span class="pl">ここに、入力した式が数式で表示されます</span></div><details class="card"><summary>入力のしかた（クリックで開く）</summary><table><tr><td>3x²</td><td><code>3*x^2</code> または <code>3x^2</code></td></tr><tr><td>分数 1/(2√x)</td><td><code>1/(2*sqrt(x))</code>（分母は必ず括弧）</td></tr><tr><td>x の 3/2 乗</td><td><code>x^(3/2)</code>（指数が式なら括弧）</td></tr><tr><td>sin 2x</td><td><code>sin(2x)</code>（関数は括弧つき）</td></tr><tr><td>sin²x</td><td><code>sin(x)^2</code></td></tr><tr><td>log₂x（底つき）</td><td><code>log_2(x)</code> または <code>log(2,x)</code>（底を先に書く）</td></tr><tr><td>分数 (x+1)/(x−2)</td><td><code>(x+1)/(x-2)</code>（分子・分母を括弧で）</td></tr><tr><td>√(x²+1)</td><td><code>sqrt(x^2+1)</code></td></tr><tr><td>eˣ / log x</td><td><code>e^x</code> / <code>log(x)</code></td></tr></table><p class="note">上のボタンでも入力できます。入力すると下の枠に数式で表示されるので、読み取り結果が合っているか確認してから採点してください。</p></details>
-<div class="row main"><button id="gr" class="pri" onclick="grade()">採点する</button><button onclick="show('hn')">💡 ヒント</button><button onclick="show('sp')">途中式</button><button onclick="show('an')">答え</button><button onclick="again()">もう一度考える</button></div></div>
-<div class="navbar"><button onclick="nextP(0)">↻ 別の問題</button><button id="nx" class="pri" onclick="nextP(1)">次の問題 →</button></div>
-<div class="row" id="selfm" hidden><button class="pri" onclick="selfMark(1)">○ 合っていた</button><button onclick="selfMark(0)">✕ 間違えた</button></div><div id="fb"></div><div id="ex"></div>
-<p class="note">入力: x, sin, cos, tan, log(ln も可), exp, sqrt, e, pi, ^ が使えます（例 2x や sin(x)^2 も可）。採点は複数の点での数値比較による同値判定です。</p></div>
-<div id="res" hidden></div></section>
-<footer>微分メーカー — 数学Ⅱ・Ⅲ「微分」の演習アプリ　学習記録はこのブラウザにのみ保存されます</footer></main>
-<script src="script.js"></script></body></html>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>微分メーカー｜数学Ⅱ・Ⅲ 微分を無限に練習</title>
+    <meta name="description" content="数学Ⅱ・Ⅲの微分を、自動生成の問題で何問でも練習。途中式の解説・自動採点・紙での自己採点・苦手分野の分析つき。">
+    <meta name="theme-color" content="#14307a">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <div class="logo">∂</div>
+        <div>
+          <h1>微分メーカー</h1>
+          <p class="sub">微分を、解いて解いて解きまくれ。</p>
+        </div>
+      </header>
+      <section id="home"></section>
+      <section id="prac" hidden>
+        <div class="topbar">
+          <button onclick="home()">← ホーム</button>
+          <div id="inf" class="chips"></div>
+          <button onclick="tgP()">✏️ 紙で解く／入力</button>
+        </div>
+        <div class="prog">
+          <i id="pg"></i>
+        </div>
+        <div id="qa">
+          <div class="card qcard">
+            <div id="q" class="q"></div>
+            <div id="pr" class="pr"></div>
+          </div>
+          <div class="card acard" id="acard">
+            <h2 id="h2in">あなたの答え（導関数）</h2>
+            <input id="in" placeholder="例: 2*x*cos(x)  /  1/(2*sqrt(x))" autocomplete="off" autocapitalize="off">
+            <div class="pal">
+              <button onclick="ins('x')">x</button>
+              <button onclick="ins('^')">^ 累乗</button><button onclick="ins('/')">/ 分数</button><button onclick="ins('*')">× 掛け算</button>
+              <button onclick="ins('+')">+</button>
+              <button onclick="ins('-')">−</button>
+              <button onclick="ins('(')">(</button><button onclick="ins(')')">)</button>
+              <button onclick="ins('sqrt(')">√</button>
+              <button onclick="ins('sin(')">sin</button>
+              <button onclick="ins('cos(')">cos</button>
+              <button onclick="ins('tan(')">tan</button>
+              <button onclick="ins('log(')">log</button>
+              <button onclick="ins('log_')">logₐ</button>
+              <button onclick="ins('log(,)',2)">log(a,x)</button>
+              <button onclick="ins('^2')">x²</button>
+              <button onclick="ins('^()',1)">^( )</button>
+              <button onclick="ins('()/()',4)">( )/( )</button>
+              <button onclick="ins('e^(')">e^</button>
+              <button onclick="ins('pi')">π</button>
+              <button onclick="bs()">⌫</button>
+              <button onclick="cl()">クリア</button>
+            </div>
+            <div id="pv" class="pv">
+              <span class="pl">ここに、入力した式が数式で表示されます</span>
+            </div>
+            <details class="card">
+              <summary>入力のしかた（クリックで開く）</summary>
+              <table>
+                <tr>
+                  <td>3x²</td>
+                  <td><code>3*x^2</code> または <code>3x^2</code></td>
+                </tr>
+                <tr>
+                  <td>分数 1/(2√x)</td>
+                  <td><code>1/(2*sqrt(x))</code>（分母は必ず括弧）</td>
+                </tr>
+                <tr>
+                  <td>x の 3/2 乗</td>
+                  <td><code>x^(3/2)</code>（指数が式なら括弧）</td>
+                </tr>
+                <tr>
+                  <td>sin 2x</td>
+                  <td><code>sin(2x)</code>（関数は括弧つき）</td>
+                </tr>
+                <tr>
+                  <td>sin²x</td>
+                  <td><code>sin(x)^2</code></td>
+                </tr>
+                <tr>
+                  <td>log₂x（底つき）</td>
+                  <td><code>log_2(x)</code> または <code>log(2,x)</code>（底を先に書く）</td>
+                </tr>
+                <tr>
+                  <td>分数 (x+1)/(x−2)</td>
+                  <td><code>(x+1)/(x-2)</code>（分子・分母を括弧で）</td>
+                </tr>
+                <tr>
+                  <td>√(x²+1)</td>
+                  <td><code>sqrt(x^2+1)</code></td>
+                </tr>
+                <tr>
+                  <td>eˣ / log x</td>
+                  <td><code>e^x</code> / <code>log(x)</code></td>
+                </tr>
+              </table>
+              <p class="note">上のボタンでも入力できます。入力すると下の枠に数式で表示されるので、読み取り結果が合っているか確認してから採点してください。</p>
+            </details>
+            <div class="row main">
+              <button id="gr" class="pri" onclick="grade()">採点する</button>
+              <button onclick="show('hn')">💡 ヒント</button>
+              <button onclick="show('sp')">途中式</button>
+              <button onclick="show('an')">答え</button>
+              <button onclick="again()">もう一度考える</button>
+            </div>
+          </div>
+          <div class="navbar">
+            <button onclick="nextP(0)">↻ 別の問題</button>
+            <button id="nx" class="pri" onclick="nextP(1)">次の問題 →</button>
+          </div>
+          <div class="row" id="selfm" hidden>
+            <button class="pri" onclick="selfMark(1)">○ 合っていた</button>
+            <button onclick="selfMark(0)">✕ 間違えた</button>
+          </div>
+          <div id="fb"></div>
+          <div id="ex"></div>
+          <p class="note">入力: x, sin, cos, tan, log(ln も可), exp, sqrt, e, pi, ^ が使えます（例 2x や sin(x)^2 も可）。採点は複数の点での数値比較による同値判定です。</p>
+        </div>
+        <div id="res" hidden></div>
+      </section>
+      <footer>微分メーカー — 数学Ⅱ・Ⅲ「微分」の演習アプリ　学習記録はこのブラウザにのみ保存されます</footer>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
